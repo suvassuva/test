@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-maroon-deep: #2A0202;
+  --color-maroon-velvet: #4A0404;
+  --color-maroon-burgundy: #6B0F1A;
+  --color-gold-metallic: #D4AF37;
+  --color-gold-champagne: #F5D061;
+  --color-ivory: #FAF6F0;
+  --color-muted: #D6C7B2;
+  --color-black: #120505;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #120505;
+}
+::-webkit-scrollbar-thumb {
+  background: #4A0404;
+  border-radius: 3px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6B0F1A;
+  border-color: #F5D061;
+}
+
+/* Base Body Styles */
+html {
+  scroll-behavior: auto !important; /* Managed by Lenis */
+  background-color: #120505;
+  color: #FAF6F0;
+  overflow-x: hidden;
+}
+
+body {
+  background: radial-gradient(ellipse at 50% 10%, #2A0202 0%, #120505 80%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Luxury Utilities */
+@layer utilities {
+  .gold-gradient-text {
+    background: linear-gradient(135deg, #FFF0B8 0%, #F5D061 25%, #D4AF37 50%, #FAF6F0 75%, #AA8C2C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gold-gradient-btn {
+    background: linear-gradient(135deg, #F5D061 0%, #D4AF37 50%, #9E7D21 100%);
+    color: #120505;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gold-gradient-btn:hover {
+    box-shadow: 0 0 25px rgba(245, 208, 97, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .gold-gradient-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-20deg);
+    transition: 0.75s ease;
+  }
+
+  .gold-gradient-btn:hover::after {
+    left: 140%;
+  }
+
+  .luxury-glass {
+    background: rgba(42, 2, 2, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 208, 97, 0.15);
+  }
+
+  .luxury-glass-subtle {
+    background: rgba(26, 1, 1, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+
+  .velvet-overlay {
+    background: radial-gradient(circle at center, rgba(74, 4, 4, 0.4) 0%, rgba(42, 2, 2, 0.85) 60%, rgba(18, 5, 5, 0.98) 100%);
+  }
+
+  .gold-border {
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    position: relative;
+  }
+
+  .gold-border-glow {
+    border: 1px solid rgba(245, 208, 97, 0.5);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+  }
+
+  .cinematic-overlay {
+    background: linear-gradient(180deg, rgba(18, 5, 5, 0.75) 0%, rgba(42, 2, 2, 0.3) 50%, rgba(18, 5, 5, 0.95) 100%);
+  }
+}
+
+/* Subtle Film Grain Effect */
+.film-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+

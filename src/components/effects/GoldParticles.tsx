@@ -24,18 +24,35 @@ export const GoldParticles: React.FC<GoldParticlesProps> = ({
     let width = (canvas.width = canvas.offsetWidth);
     let height = (canvas.height = canvas.offsetHeight);
 
+    const mouse = { x: -1000, y: -1000, radius: 140 };
+
     const handleResize = () => {
       if (!canvas) return;
       width = canvas.width = canvas.offsetWidth;
       height = canvas.height = canvas.offsetHeight;
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
     window.addEventListener("resize", handleResize);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseout", handleMouseLeave);
 
     // Particle pool
     const particles = Array.from({ length: particleCount }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height,
+      originX: Math.random() * width,
+      originY: Math.random() * height,
       size: Math.random() * 2.2 + 0.6,
       speedX: (Math.random() - 0.5) * 0.35,
       speedY: -Math.random() * 0.45 - 0.15,
@@ -51,6 +68,17 @@ export const GoldParticles: React.FC<GoldParticlesProps> = ({
         p.x += p.speedX;
         p.y += p.speedY;
         p.opacity += Math.sin(Date.now() * p.pulseSpeed) * 0.005;
+
+        // Subtle mouse repulsion & swirl
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < mouse.radius && dist > 0) {
+          const force = (1 - dist / mouse.radius) * 2.2;
+          p.x -= (dx / dist) * force;
+          p.y -= (dy / dist) * force;
+        }
 
         // Wrap around
         if (p.y < -10) {
@@ -78,10 +106,11 @@ export const GoldParticles: React.FC<GoldParticlesProps> = ({
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseout", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
   }, [particleCount]);
 
   return <canvas ref={canvasRef} className={className} />;
 };
-

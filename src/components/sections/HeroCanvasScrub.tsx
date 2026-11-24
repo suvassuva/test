@@ -302,40 +302,43 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
             }}
           />
 
+          {/* Cinematic lower-third shadow vignette to ensure editorial readability */}
+          <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-maroon-darkest/95 via-maroon-darkest/50 to-transparent pointer-events-none z-[1]" />
+
           {/* Floating Gold Particles */}
           <GoldParticles particleCount={20} />
         </div>
 
         {/* ========================================================= */}
-        {/* FLOATING EDITORIAL TYPOGRAPHY (WITHOUT BACKGROUND CARD)    */}
+        {/* EDITORIAL LOWER-THIRD LUXURY GLASS CARDS (NO TEXT CLASH)  */}
         {/* ========================================================= */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pointer-events-none">
-          <div className="relative w-full max-w-4xl flex items-center justify-center">
+        <div className="absolute inset-0 z-10 flex flex-col justify-end items-center px-4 sm:px-6 md:px-8 pb-14 sm:pb-18 lg:pb-22 pointer-events-none">
+          <div className="relative w-full max-w-3xl flex items-center justify-center min-h-[300px] sm:min-h-[320px]">
 
             {/* ----------------- ACT 01: HERITAGE & BULLION ----------------- */}
             <div
               ref={text1Ref}
-              className="w-full flex flex-col items-center justify-center text-center pointer-events-auto px-2 sm:px-6"
+              className="w-full rounded-2xl sm:rounded-3xl bg-maroon-darkest/85 backdrop-blur-xl border border-gold-metallic/35 shadow-[0_16px_50px_rgba(0,0,0,0.9)] p-5 sm:p-7 md:p-8 flex flex-col items-center justify-center text-center pointer-events-auto"
             >
-              {/* Floating Headline with Cinematic Drop Shadow */}
-              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.18] mb-3 sm:mb-5 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] max-w-3xl">
-                Generations of Gold —{" "}
+              {/* Floating Headline */}
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.2] mb-2 sm:mb-3 max-w-2xl">
+                Ancestral Gold —{" "}
                 <span className="gold-gradient-text font-normal block sm:inline">
-                  Honored with Absolute Trust.
+                  Your Shield in an Emergency.
                 </span>
               </h1>
 
               {/* Subtitle */}
-              <p className="text-xs sm:text-base md:text-lg text-luxury-ivory/95 font-normal sm:font-light max-w-xl sm:max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
-                Every piece of jewellery holds family memories and generational security. Whether acquiring certified 999 24K bullion coins or unlocking the value of family gold, experience transparent daily market rates in an atmosphere of respect.
+              <p className="text-xs sm:text-sm md:text-base text-luxury-ivory/90 font-light max-w-xl mx-auto leading-relaxed mb-4 sm:mb-6">
+                Every traditional necklace and sacred ornament holds generations of honor. When urgent medical or sudden financial needs arise, unlock maximum daily market value without falling into high-interest debt traps.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={onOpenValuation}
-                  className="gold-gradient-btn px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto drop-shadow-xl cursor-pointer active:scale-95 transition-transform"
+                  className="gold-gradient-btn px-6 sm:px-7 py-3 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto cursor-pointer active:scale-95 transition-transform"
                 >
                   <span>Get Instant Valuation</span>
                   <ArrowRight className="w-4 h-4" />
@@ -343,7 +346,7 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
 
                 <a
                   href={`tel:${BRAND_INFO.helpline.replace(/\s+/g, "")}`}
-                  className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border border-gold-metallic/50 text-gold-champagne hover:bg-gold-metallic/20 uppercase tracking-wider text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-2 transition-colors w-full sm:w-auto bg-maroon-darkest/75 backdrop-blur-md drop-shadow-xl"
+                  className="px-5 sm:px-6 py-3 rounded-full border border-gold-metallic/40 text-gold-champagne hover:bg-gold-metallic/20 uppercase tracking-wider text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-2 transition-colors w-full sm:w-auto bg-maroon-darkest/75 backdrop-blur-md"
                 >
                   <Phone className="w-4 h-4 text-gold-metallic" />
                   <span>Call {BRAND_INFO.helpline}</span>
@@ -351,20 +354,20 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
               </div>
 
               {/* Trust Badges */}
-              <div className="hidden sm:flex items-center justify-center gap-6 mt-8 pt-5 text-xs text-luxury-ivory/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              <div className="hidden sm:flex items-center justify-center gap-5 mt-4 pt-3 text-xs text-luxury-ivory/80 border-t border-gold-metallic/15 w-full">
                 <div className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-gold-metallic" />
-                  <span>BIS 916 Hallmarked</span>
+                  <span>Ancestral Gold Honored</span>
                 </div>
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <Scale className="w-4 h-4 text-gold-metallic" />
-                  <span>Certified 999 24K Bullion</span>
+                  <span>Instant Emergency Relief</span>
                 </div>
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <Award className="w-4 h-4 text-gold-metallic" />
-                  <span>100% Transparent Rates</span>
+                  <span>Highest Market Rates</span>
                 </div>
               </div>
             </div>
@@ -372,23 +375,23 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
             {/* ----------------- ACT 02: DIGNIFIED HANDOVER ----------------- */}
             <div
               ref={text2Ref}
-              className="absolute inset-0 w-full flex flex-col items-center justify-center text-center pointer-events-auto px-2 sm:px-6"
+              className="absolute inset-0 w-full rounded-2xl sm:rounded-3xl bg-maroon-darkest/85 backdrop-blur-xl border border-gold-metallic/35 shadow-[0_16px_50px_rgba(0,0,0,0.9)] p-5 sm:p-7 md:p-8 flex flex-col items-center justify-center text-center pointer-events-auto"
             >
-              <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.18] mb-3 sm:mb-5 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] max-w-3xl">
-                White-Glove Handover —{" "}
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.2] mb-2 sm:mb-3 max-w-2xl">
+                Respecting Your Heirlooms —{" "}
                 <span className="gold-gradient-text font-normal block sm:inline">
-                  In Complete Confidentiality.
+                  In Private Executive Cabins.
                 </span>
               </h2>
 
-              <p className="text-xs sm:text-base md:text-lg text-luxury-ivory/95 font-normal sm:font-light max-w-xl sm:max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
-                No crowded showroom counters, no inquisitive onlookers. Step into our secured private cabins where your jewellery never leaves your sight. Gold is weighed openly on calibrated 0.001g digital balances where every milligram counts.
+              <p className="text-xs sm:text-sm md:text-base text-luxury-ivory/90 font-light max-w-xl mx-auto leading-relaxed mb-4 sm:mb-6">
+                Handing over family gold is an emotional step that deserves absolute privacy. In our secure, soundproof cabins across 200+ branches, your ornaments never leave your sight. We also assist with compassionate discretion to release high-interest pledged gold.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
                 <a
                   href={`tel:${BRAND_INFO.helpline.replace(/\s+/g, "")}`}
-                  className="gold-gradient-btn px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto drop-shadow-xl"
+                  className="gold-gradient-btn px-6 sm:px-8 py-3 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Valuation Desk: {BRAND_INFO.helpline}</span>
@@ -396,20 +399,20 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
               </div>
 
               {/* Trust Badges */}
-              <div className="hidden sm:flex items-center justify-center gap-6 mt-8 pt-5 text-xs text-luxury-ivory/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              <div className="hidden sm:flex items-center justify-center gap-5 mt-4 pt-3 text-xs text-luxury-ivory/80 border-t border-gold-metallic/15 w-full">
                 <div className="flex items-center gap-1.5">
                   <Lock className="w-4 h-4 text-gold-metallic" />
-                  <span>Soundproof Private Cabins</span>
+                  <span>100% Confidential Cabins</span>
                 </div>
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <Scale className="w-4 h-4 text-gold-metallic" />
-                  <span>Calibrated 0.001g Balances</span>
+                  <span>Release Pledged Gold Assistance</span>
                 </div>
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-gold-metallic" />
-                  <span>Release Pledged Bank Gold</span>
+                  <span>Dignified Care</span>
                 </div>
               </div>
             </div>
@@ -417,23 +420,23 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
             {/* ----------------- ACT 03: PURITY SCAN ----------------- */}
             <div
               ref={text3Ref}
-              className="absolute inset-0 w-full flex flex-col items-center justify-center text-center pointer-events-auto px-2 sm:px-6"
+              className="absolute inset-0 w-full rounded-2xl sm:rounded-3xl bg-maroon-darkest/85 backdrop-blur-xl border border-gold-metallic/35 shadow-[0_16px_50px_rgba(0,0,0,0.9)] p-5 sm:p-7 md:p-8 flex flex-col items-center justify-center text-center pointer-events-auto"
             >
-              <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.18] mb-3 sm:mb-5 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] max-w-3xl">
-                100% Scientific Precision —{" "}
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.2] mb-2 sm:mb-3 max-w-2xl">
+                German Karatmeter Testing —{" "}
                 <span className="gold-gradient-text font-normal block sm:inline">
-                  Without Melting a Milligram.
+                  Never Melted, Never Damaged.
                 </span>
               </h2>
 
-              <p className="text-xs sm:text-base md:text-lg text-luxury-ivory/95 font-normal sm:font-light max-w-xl sm:max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
-                Never allow your cherished ornaments to be scratched, filed, or melted. Our computerized German Karatmeter uses high-precision X-Ray Fluorescence to analyze exact purity in 45 seconds right in front of you. Zero damage, zero arbitrary deductions.
+              <p className="text-xs sm:text-sm md:text-base text-luxury-ivory/90 font-light max-w-xl mx-auto leading-relaxed mb-4 sm:mb-6">
+                Sentimental ornaments should never be scratched, filed, or melted down. Certified German XRF technology tests exact 22K/24K purity on-screen in 45 seconds right before your eyes. Zero melting losses, zero hidden deductions.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
                 <a
                   href={`tel:${BRAND_INFO.helpline.replace(/\s+/g, "")}`}
-                  className="gold-gradient-btn px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto drop-shadow-xl"
+                  className="gold-gradient-btn px-6 sm:px-8 py-3 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Valuation Desk: {BRAND_INFO.helpline}</span>
@@ -441,7 +444,7 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
               </div>
 
               {/* Trust Badges */}
-              <div className="hidden sm:flex items-center justify-center gap-6 mt-8 pt-5 text-xs text-luxury-ivory/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              <div className="hidden sm:flex items-center justify-center gap-5 mt-4 pt-3 text-xs text-luxury-ivory/80 border-t border-gold-metallic/15 w-full">
                 <div className="flex items-center gap-1.5">
                   <Flame className="w-4 h-4 text-gold-metallic" />
                   <span>Zero Melting Damage</span>
@@ -449,12 +452,12 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-gold-metallic" />
-                  <span>German XRF Spectrometry</span>
+                  <span>German XRF Precision</span>
                 </div>
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <Scale className="w-4 h-4 text-gold-metallic" />
-                  <span>45-Second Exact Karatage</span>
+                  <span>Exact 0.001g Balances</span>
                 </div>
               </div>
             </div>
@@ -462,23 +465,23 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
             {/* ----------------- ACT 04: INSTANT PAYMENT ----------------- */}
             <div
               ref={text4Ref}
-              className="absolute inset-0 w-full flex flex-col items-center justify-center text-center pointer-events-auto px-2 sm:px-6"
+              className="absolute inset-0 w-full rounded-2xl sm:rounded-3xl bg-maroon-darkest/85 backdrop-blur-xl border border-gold-metallic/35 shadow-[0_16px_50px_rgba(0,0,0,0.9)] p-5 sm:p-7 md:p-8 flex flex-col items-center justify-center text-center pointer-events-auto"
             >
-              <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.18] mb-3 sm:mb-5 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] max-w-3xl">
-                Immediate Bank Settlement —{" "}
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-light text-luxury-ivory tracking-tight leading-[1.2] mb-2 sm:mb-3 max-w-2xl">
+                Instant Bank Credit in Minutes —{" "}
                 <span className="gold-gradient-text font-normal block sm:inline">
-                  Credited in Under 20 Minutes.
+                  Peace of Mind Restored.
                 </span>
               </h2>
 
-              <p className="text-xs sm:text-base md:text-lg text-luxury-ivory/95 font-normal sm:font-light max-w-xl sm:max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
-                Experience instant financial liquidity without delays. Your funds are credited directly to your bank account via instant IMPS or RTGS before you exit our branch, backed by official stamped documentation and 12+ years of trust.
+              <p className="text-xs sm:text-sm md:text-base text-luxury-ivory/90 font-light max-w-xl mx-auto leading-relaxed mb-4 sm:mb-6">
+                When an emergency strikes, your family cannot afford to wait. Funds are credited directly to your bank account via instant IMPS before you step out of our doors, backed by official stamped documentation and 1.5+ Crore satisfied families.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
                 <a
                   href={`tel:${BRAND_INFO.helpline.replace(/\s+/g, "")}`}
-                  className="gold-gradient-btn px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto drop-shadow-xl"
+                  className="gold-gradient-btn px-6 sm:px-8 py-3 rounded-full text-maroon-darkest font-semibold tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2 shadow-gold-glow uppercase w-full sm:w-auto"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Helpline: {BRAND_INFO.helpline}</span>
@@ -486,7 +489,7 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
               </div>
 
               {/* Trust Badges */}
-              <div className="hidden sm:flex items-center justify-center gap-6 mt-8 pt-5 text-xs text-luxury-ivory/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              <div className="hidden sm:flex items-center justify-center gap-5 mt-4 pt-3 text-xs text-luxury-ivory/80 border-t border-gold-metallic/15 w-full">
                 <div className="flex items-center gap-1.5">
                   <Building className="w-4 h-4 text-gold-metallic" />
                   <span>Direct Bank Credit via IMPS</span>
@@ -494,12 +497,12 @@ export const HeroCanvasScrub: React.FC<HeroCanvasScrubProps> = ({ onOpenValuatio
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-gold-metallic" />
-                  <span>Official Stamped Certificate</span>
+                  <span>Emergency Settled Under 10 Mins</span>
                 </div>
                 <span className="text-gold-metallic/40">•</span>
                 <div className="flex items-center gap-1.5">
                   <Award className="w-4 h-4 text-gold-metallic" />
-                  <span>1.5+ Crore Customers</span>
+                  <span>1.5+ Crore Families Helped</span>
                 </div>
               </div>
             </div>

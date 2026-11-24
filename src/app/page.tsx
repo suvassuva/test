@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/effects/ScrollProgress";
 import { CustomCursor } from "@/components/effects/CustomCursor";
 import { HeroCanvasScrub } from "@/components/sections/HeroCanvasScrub";
+import { PanIndiaTrust } from "@/components/sections/PanIndiaTrust";
 import { ValuationModal } from "@/components/ui/ValuationModal";
 
 export default function Home() {
@@ -31,6 +32,9 @@ export default function Home() {
 
       {/* Cinematic Hero Canvas Scrub Experience */}
       <HeroCanvasScrub onOpenValuation={() => setIsValuationOpen(true)} />
+
+      {/* Pan-India Trust Metrics & 3D Cinematic Storytelling */}
+      <PanIndiaTrust onOpenValuation={() => setIsValuationOpen(true)} />
 
       {/* Luxury Footer */}
       <Footer />

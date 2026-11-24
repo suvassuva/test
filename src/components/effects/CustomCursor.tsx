@@ -9,22 +9,28 @@ interface GoldSparkle {
   vx: number;
   vy: number;
   size: number;
+  maxSize: number;
   alpha: number;
   decay: number;
   color: string;
+  glowColor: string;
   twinkleSpeed: number;
+  twinkleOffset: number;
   angle: number;
   spin: number;
   isStar: boolean;
+  wobbleSpeed: number;
+  wobbleAmp: number;
+  age: number;
 }
 
 const GOLD_PALETTE = [
-  "#FFF4D0", // Diamond white gold
-  "#FFE082", // Brilliant 24K champagne
-  "#F5D061", // Pure gold
-  "#D4AF37", // Metallic imperial gold
-  "#E5B83B", // Warm bullion gold
-  "#C69214", // Deep antique gold
+  { core: "#FFFFFF", glow: "#FFE57F" }, // White-hot diamond gold
+  { core: "#FFF8D6", glow: "#FFD54F" }, // Brilliant 24K champagne
+  { core: "#FFE082", glow: "#FFC107" }, // Vivid 24K radiant gold
+  { core: "#FFD54F", glow: "#FFA000" }, // Pure bullion gold
+  { core: "#FFCA28", glow: "#FF8F00" }, // Rich imperial gold
+  { core: "#FFB300", glow: "#E65100" }, // Warm molten amber gold
 ];
 
 export const CustomCursor: React.FC = () => {
@@ -35,14 +41,12 @@ export const CustomCursor: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mousePos = useRef({ x: -100, y: -100 });
   const prevMousePos = useRef({ x: -100, y: -100 });
-  const isMoving = useRef(false);
-  const moveTimer = useRef<NodeJS.Timeout | null>(null);
 
   // Smooth springs for primary pointer dot and trailing ring
-  const cursorX = useSpring(-100, { damping: 28, stiffness: 450 });
-  const cursorY = useSpring(-100, { damping: 28, stiffness: 450 });
-  const trailX = useSpring(-100, { damping: 20, stiffness: 220 });
-  const trailY = useSpring(-100, { damping: 20, stiffness: 220 });
+  const cursorX = useSpring(-100, { damping: 25, stiffness: 450 });
+  const cursorY = useSpring(-100, { damping: 25, stiffness: 450 });
+  const trailX = useSpring(-100, { damping: 18, stiffness: 220 });
+  const trailY = useSpring(-100, { damping: 18, stiffness: 220 });
 
   useEffect(() => {
     // Only activate for non-touch desktop devices
@@ -58,24 +62,22 @@ export const CustomCursor: React.FC = () => {
 
     let animId: number;
     const particles: GoldSparkle[] = [];
-    const maxParticles = 120;
+    const maxParticles = 280;
 
-    const setCanvasSize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      ctx.scale(dpr, dpr);
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
-    setCanvasSize();
-    window.addEventListener("resize", setCanvasSize);
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
-    // Particle spawning helper
+    // Particle spawning helper with larger, visible, radiant gold dust
     const spawnParticle = (
       x: number,
       y: number,
       spread = 1,
-      extraForce = 0,
+      extraSpeed = 0,
       forceStar = false
     ) => {
       if (particles.length >= maxParticles) {
@@ -83,57 +85,86 @@ export const CustomCursor: React.FC = () => {
       }
 
       const angle = Math.random() * Math.PI * 2;
-      const speed = (Math.random() * 1.6 + 0.4 + extraForce) * spread;
-      const color =
+      const speed = (Math.random() * 2.2 + 0.6 + extraSpeed) * spread;
+      const palette =
         GOLD_PALETTE[Math.floor(Math.random() * GOLD_PALETTE.length)];
-      const isStar = forceStar || Math.random() < 0.22;
+      const isStar = forceStar || Math.random() < 0.35; // 35% are brilliant 4-point diamond stars
+
+      // Size: 3px to 7px for orbs, 6px to 14px for sparkle stars (clearly visible!)
+      const size = isStar
+        ? Math.random() * 6 + 6
+        : Math.random() * 3.5 + 2.5;
 
       particles.push({
-        x: x + (Math.random() - 0.5) * 8 * spread,
-        y: y + (Math.random() - 0.5) * 8 * spread,
+        x: x + (Math.random() - 0.5) * 12 * spread,
+        y: y + (Math.random() - 0.5) * 12 * spread,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - (0.35 + Math.random() * 0.4), // Gentle upward float
-        size: isStar ? Math.random() * 2.8 + 2.2 : Math.random() * 2.2 + 0.8,
-        alpha: Math.random() * 0.35 + 0.65,
-        decay: Math.random() * 0.022 + 0.014,
-        color,
-        twinkleSpeed: Math.random() * 0.15 + 0.05,
+        vy: Math.sin(angle) * speed - (Math.random() * 0.8 + 0.4), // Gentle upward buoyant float
+        size: size * 0.4,
+        maxSize: size,
+        alpha: 1.0, // Start 100% bright
+        decay: Math.random() * 0.012 + 0.008, // Generous lifespan: stays visible for 1.5 - 2.5 seconds
+        color: palette.core,
+        glowColor: palette.glow,
+        twinkleSpeed: Math.random() * 0.18 + 0.08,
+        twinkleOffset: Math.random() * Math.PI * 2,
         angle: Math.random() * Math.PI,
-        spin: (Math.random() - 0.5) * 0.12,
+        spin: (Math.random() - 0.5) * 0.14,
         isStar,
+        wobbleSpeed: Math.random() * 0.06 + 0.02,
+        wobbleAmp: Math.random() * 0.6 + 0.2,
+        age: 0,
       });
     };
 
-    // Draw luxury 4-point gold sparkle star
+    // Draw radiant 4-point gold sparkle diamond star
     const drawSparkleStar = (
       c: CanvasRenderingContext2D,
       x: number,
       y: number,
       size: number,
-      angle: number
+      angle: number,
+      coreColor: string,
+      glowColor: string,
+      alpha: number
     ) => {
       c.save();
       c.translate(x, y);
       c.rotate(angle);
+
+      // Outer radiant diamond glow
+      c.shadowBlur = size * 2.5;
+      c.shadowColor = glowColor;
+
       c.beginPath();
+      const outerX = size * 1.35;
+      const innerX = size * 0.25;
 
-      const spikes = 4;
-      const outerRadius = size;
-      const innerRadius = size * 0.28;
-
-      let rot = (Math.PI / 2) * 3;
-      const step = Math.PI / spikes;
-
-      c.moveTo(0, -outerRadius);
-      for (let i = 0; i < spikes; i++) {
-        c.lineTo(Math.cos(rot) * outerRadius, Math.sin(rot) * outerRadius);
-        rot += step;
-        c.lineTo(Math.cos(rot) * innerRadius, Math.sin(rot) * innerRadius);
-        rot += step;
-      }
-      c.lineTo(0, -outerRadius);
+      c.moveTo(0, -outerX);
+      c.quadraticCurveTo(0, -innerX, innerX, 0);
+      c.quadraticCurveTo(0, innerX, 0, outerX);
+      c.quadraticCurveTo(0, innerX, -innerX, 0);
+      c.quadraticCurveTo(0, -innerX, 0, -outerX);
       c.closePath();
+
+      c.fillStyle = glowColor;
+      c.globalAlpha = alpha * 0.85;
       c.fill();
+
+      // Sharp white-gold inner core
+      c.beginPath();
+      const coreOuter = size * 0.7;
+      const coreInner = size * 0.18;
+      c.moveTo(0, -coreOuter);
+      c.lineTo(coreInner, 0);
+      c.lineTo(0, coreOuter);
+      c.lineTo(-coreInner, 0);
+      c.closePath();
+
+      c.fillStyle = coreColor;
+      c.globalAlpha = alpha;
+      c.fill();
+
       c.restore();
     };
 
@@ -145,14 +176,14 @@ export const CustomCursor: React.FC = () => {
       trailX.set(x);
       trailY.set(y);
 
-      // Interpolate trail between previous and current pos for smooth continuous gold dust
+      // Interpolate smooth continuous gold dust stream
       if (prevMousePos.current.x > 0) {
         const dx = x - prevMousePos.current.x;
         const dy = y - prevMousePos.current.y;
         const dist = Math.hypot(dx, dy);
 
-        // Spawn particles along the path based on mouse movement speed
-        const count = Math.min(Math.floor(dist / 9) + 1, 4);
+        // Spawn a rich spray of glowing particles
+        const count = Math.min(Math.floor(dist / 6) + 2, 8);
         for (let i = 0; i < count; i++) {
           const ratio = i / count;
           const px = prevMousePos.current.x + dx * ratio;
@@ -162,20 +193,14 @@ export const CustomCursor: React.FC = () => {
       }
 
       prevMousePos.current = { x, y };
-
-      isMoving.current = true;
-      if (moveTimer.current) clearTimeout(moveTimer.current);
-      moveTimer.current = setTimeout(() => {
-        isMoving.current = false;
-      }, 120);
     };
 
-    // Burst gold particles on click
+    // Burst radiant gold particles on click
     const handleMouseDown = (e: MouseEvent) => {
       setIsClicking(true);
       const { clientX: x, clientY: y } = e;
-      for (let i = 0; i < 18; i++) {
-        spawnParticle(x, y, 1.8, Math.random() * 2 + 1, i % 2 === 0);
+      for (let i = 0; i < 28; i++) {
+        spawnParticle(x, y, 2.2, Math.random() * 3 + 1.5, i % 2 === 0);
       }
     };
 
@@ -198,32 +223,37 @@ export const CustomCursor: React.FC = () => {
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
 
     // 60FPS Render Loop
-    let lastTime = performance.now();
-    const render = (time: number) => {
-      const dt = (time - lastTime) / 1000;
-      lastTime = time;
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-      // While hovering on interactive elements or stationary, emit gentle ambient gold embers
+      // While hovering on interactive buttons or resting, emit ambient gold embers
       if (
         isHovered &&
         mousePos.current.x > 0 &&
-        Math.random() < 0.35
+        Math.random() < 0.45
       ) {
-        spawnParticle(mousePos.current.x, mousePos.current.y, 1.2, 0.4);
+        spawnParticle(mousePos.current.x, mousePos.current.y, 1.4, 0.5);
       }
 
-      // Update & render particles
+      // Update & render particles with rich glow
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        p.x += p.vx;
+        p.age++;
+        p.x += p.vx + Math.sin(p.age * p.wobbleSpeed) * p.wobbleAmp;
         p.y += p.vy;
+        p.vx *= 0.98; // Air friction
+        p.vy *= 0.98;
         p.angle += p.spin;
         p.alpha -= p.decay;
 
-        // Twinkle factor
-        const twinkle = Math.sin(time * p.twinkleSpeed) * 0.25;
+        // Animate size pop-in
+        if (p.size < p.maxSize) {
+          p.size += (p.maxSize - p.size) * 0.15;
+        }
+
+        // Active sparkle twinkle calculation
+        const twinkle =
+          Math.sin(p.age * p.twinkleSpeed + p.twinkleOffset) * 0.35;
         const currentAlpha = Math.max(0, Math.min(1, p.alpha + twinkle));
 
         if (p.alpha <= 0) {
@@ -231,20 +261,38 @@ export const CustomCursor: React.FC = () => {
           continue;
         }
 
-        ctx.save();
-        ctx.globalAlpha = currentAlpha;
-        ctx.fillStyle = p.color;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = p.isStar ? 10 : 6;
-
         if (p.isStar) {
-          drawSparkleStar(ctx, p.x, p.y, p.size, p.angle);
+          drawSparkleStar(
+            ctx,
+            p.x,
+            p.y,
+            p.size,
+            p.angle,
+            p.color,
+            p.glowColor,
+            currentAlpha
+          );
         } else {
+          ctx.save();
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+
+          // Rich multi-layered glowing orb
+          ctx.shadowBlur = p.size * 2.8;
+          ctx.shadowColor = p.glowColor;
+          ctx.fillStyle = p.glowColor;
+          ctx.globalAlpha = currentAlpha * 0.8;
           ctx.fill();
+
+          // Bright white-gold hot core
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 0.55, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = currentAlpha;
+          ctx.fill();
+
+          ctx.restore();
         }
-        ctx.restore();
       }
 
       animId = requestAnimationFrame(render);
@@ -253,13 +301,12 @@ export const CustomCursor: React.FC = () => {
     animId = requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener("resize", setCanvasSize);
+      window.removeEventListener("resize", resizeCanvas);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mouseover", handleMouseOver);
       cancelAnimationFrame(animId);
-      if (moveTimer.current) clearTimeout(moveTimer.current);
     };
   }, [cursorX, cursorY, trailX, trailY, isHovered]);
 
@@ -273,50 +320,51 @@ export const CustomCursor: React.FC = () => {
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
 
-      {/* Ambient Liquid Gold Glow Spotlight under Mouse */}
+      {/* Prominent Ambient 24K Liquid Gold Spotlight Aura */}
       <motion.div
-        className="fixed top-0 left-0 w-64 h-64 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+        className="fixed top-0 left-0 w-72 h-72 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
         style={{
           x: trailX,
           y: trailY,
           background:
-            "radial-gradient(circle, rgba(245, 208, 97, 0.12) 0%, rgba(212, 175, 55, 0.04) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(255, 215, 0, 0.22) 0%, rgba(212, 175, 55, 0.10) 35%, rgba(212, 175, 55, 0.02) 65%, transparent 75%)",
+          filter: "blur(12px)",
         }}
         animate={{
-          scale: isClicking ? 1.4 : isHovered ? 1.25 : 1,
-          opacity: isHovered ? 0.95 : 0.75,
+          scale: isClicking ? 1.6 : isHovered ? 1.4 : 1,
+          opacity: isHovered ? 1 : 0.85,
         }}
         transition={{ duration: 0.25, ease: "easeOut" }}
       />
 
-      {/* Primary 24K Gold Cursor Core Dot */}
+      {/* Primary 24K Gold Cursor Core Diamond Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 rounded-full bg-gradient-to-r from-gold-bright via-gold-champagne to-gold-metallic -translate-x-1/2 -translate-y-1/2 shadow-[0_0_12px_rgba(255,215,0,0.9)] pointer-events-none"
+        className="fixed top-0 left-0 w-3 h-3 rounded-full bg-gradient-to-r from-gold-bright via-gold-champagne to-gold-metallic -translate-x-1/2 -translate-y-1/2 shadow-[0_0_16px_rgba(255,215,0,1),0_0_8px_rgba(255,255,255,0.9)] pointer-events-none"
         style={{
           x: cursorX,
           y: cursorY,
         }}
         animate={{
-          scale: isClicking ? 0.6 : isHovered ? 1.5 : 1,
+          scale: isClicking ? 0.6 : isHovered ? 1.6 : 1,
         }}
         transition={{ duration: 0.15, ease: "easeOut" }}
       />
 
       {/* Trailing Luxury Polished Gold Ring */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full border border-gold-metallic/50 -translate-x-1/2 -translate-y-1/2 pointer-events-none backdrop-blur-[0.5px]"
+        className="fixed top-0 left-0 rounded-full border-2 border-gold-metallic/70 -translate-x-1/2 -translate-y-1/2 pointer-events-none backdrop-blur-[1px]"
         animate={{
-          width: isClicking ? 20 : isHovered ? 46 : 28,
-          height: isClicking ? 20 : isHovered ? 46 : 28,
+          width: isClicking ? 22 : isHovered ? 52 : 32,
+          height: isClicking ? 22 : isHovered ? 52 : 32,
           borderColor: isHovered
-            ? "rgba(255, 224, 130, 0.95)"
-            : "rgba(212, 175, 55, 0.45)",
+            ? "rgba(255, 224, 130, 1)"
+            : "rgba(212, 175, 55, 0.65)",
           backgroundColor: isHovered
-            ? "rgba(212, 175, 55, 0.12)"
-            : "transparent",
+            ? "rgba(212, 175, 55, 0.18)"
+            : "rgba(212, 175, 55, 0.04)",
           boxShadow: isHovered
-            ? "0 0 16px rgba(245, 208, 97, 0.45)"
-            : "0 0 8px rgba(212, 175, 55, 0.15)",
+            ? "0 0 24px rgba(245, 208, 97, 0.65)"
+            : "0 0 12px rgba(212, 175, 55, 0.35)",
         }}
         transition={{ duration: 0.22, ease: "easeOut" }}
         style={{
